@@ -74,17 +74,18 @@ class MainActivity : AppCompatActivity() {
                 0 -> Fragment01() // clear
                 1 -> Fragment02() // reverse
                 2 -> Fragment03() // merge
+                3 -> Fragment04() // Capitalize
                 else -> throw IllegalStateException("no more fragment")
             }
         }
 
         override fun getCount(): Int {
-            return 3
+            return 4
         }
 
     }
 
     companion object {
-        val TAG = "Mainr"
+        val TAG = "Main"
     }
 }
