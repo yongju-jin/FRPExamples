@@ -5,15 +5,15 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
-import kotlinx.android.synthetic.main.fragment_01.*
-import yongju.frpexamples.R.layout.fragment_01
+import kotlinx.android.synthetic.main.fragment_clear.*
+import yongju.frpexamples.R.layout.fragment_clear
 import yongju.frpexamples.base.BaseFragment
 
 /**
  * Created by yongju on 2017. 10. 23..
  */
-class Fragment01: BaseFragment() {
-    override val layoutId: Int = fragment_01
+class Clear : BaseFragment() {
+    override val layoutId: Int = fragment_clear
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         RxView.clicks(clear).map {
@@ -25,14 +25,14 @@ class Fragment01: BaseFragment() {
             disposables.add(this)
         }
 
-//        val sClicked = RxView.clicks(clear)
+//        val sClicked = RxView.clicks(fragment_clear)
 //        val sClearIt = sClicked.map { "" }
 //        sClearIt.subscribe(
 //                editText::setText,
 //                Throwable::printStackTrace
 //        )
 //
-//        RxView.clicks(clear).subscribe({
+//        RxView.clicks(fragment_clear).subscribe({
 //            editText.setText("")
 //        }, Throwable::printStackTrace)
     }

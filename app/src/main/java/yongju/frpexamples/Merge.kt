@@ -5,15 +5,15 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
-import kotlinx.android.synthetic.main.fragment_03.*
-import yongju.frpexamples.R.layout.fragment_03
+import kotlinx.android.synthetic.main.fragment_merge.*
+import yongju.frpexamples.R.layout.fragment_merge
 import yongju.frpexamples.base.BaseFragment
 
 /**
  * Created by yongju on 2017. 10. 24..
  */
-class Fragment03: BaseFragment() {
-    override val layoutId: Int = fragment_03
+class Merge : BaseFragment() {
+    override val layoutId: Int = fragment_merge
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         val obHello = RxView.clicks(btn_hello).map { "hello" }
