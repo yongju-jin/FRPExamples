@@ -71,17 +71,18 @@ class MainActivity : AppCompatActivity() {
             return when (position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-                0 -> Clear() // fragment_clear
-                1 -> Reverse() // fragment_reverse
-                2 -> Merge() // fragment_merge
-                3 -> Capitalize() // Capitalize
-                4 -> Accumuluator() // accumulator
+                5 -> Clear() // fragment_clear
+                4 -> Reverse() // fragment_reverse
+                3 -> Merge() // fragment_merge
+                2 -> Capitalize() // Capitalize
+                1 -> Accumuluator() // accumulator
+                0 -> FormValild() // form valid
                 else -> throw IllegalStateException("no more fragment")
             }
         }
 
         override fun getCount(): Int {
-            return 5
+            return 6
         }
     }
 
