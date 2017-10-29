@@ -1,7 +1,6 @@
 package yongju.frpexamples
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -16,11 +15,11 @@ import yongju.frpexamples.base.BaseFragment
 /**
  * Created by yongju on 2017. 10. 27..
  */
+
 class FormValild: BaseFragment() {
     private val TAG = "FormValid"
 
     override val layoutId: Int = fragment_form_valid
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         val editEmails = listOf(
                 edit_email_1,
@@ -29,7 +28,7 @@ class FormValild: BaseFragment() {
                 edit_email_4
         )
 
-        val validName = BehaviorSubject.createDefault(false)
+        val validName = makeBehaviorSubject(false)
 
         // Name
         RxTextView.textChanges(edit_name).map {
@@ -46,10 +45,10 @@ class FormValild: BaseFragment() {
             disposables.add(this)
         }
 
-        val validEditEmail1 = BehaviorSubject.createDefault(true)
-        val validEditEmail2 = BehaviorSubject.createDefault(false)
-        val validEditEmail3 = BehaviorSubject.createDefault(false)
-        val validEditEmail4 = BehaviorSubject.createDefault(false)
+        val validEditEmail1 = makeBehaviorSubject(true)
+        val validEditEmail2 = makeBehaviorSubject(false)
+        val validEditEmail3 = makeBehaviorSubject(false)
+        val validEditEmail4 = makeBehaviorSubject(false)
 
         val validEditEmails = listOf(
                 validEditEmail1,
@@ -58,9 +57,9 @@ class FormValild: BaseFragment() {
                 validEditEmail4
         )
 
-        val validEmailCount = BehaviorSubject.createDefault(true)
+        val validEmailCount = makeBehaviorSubject(true)
 
-        val emailCount = BehaviorSubject.createDefault(1).apply {
+        val emailCount = makeBehaviorSubject(1).apply {
                 map {
                     when {
                         it < 1 || it > 4 -> Pair(it, "must be 1 to 4")
@@ -91,10 +90,10 @@ class FormValild: BaseFragment() {
             disposables.add(this)
         }
 
-        val validEmail1 = BehaviorSubject.createDefault(false)
-        val validEmail2 = BehaviorSubject.createDefault(false)
-        val validEmail3 = BehaviorSubject.createDefault(false)
-        val validEmail4 = BehaviorSubject.createDefault(false)
+        val validEmail1 = makeBehaviorSubject(false)
+        val validEmail2 = makeBehaviorSubject(false)
+        val validEmail3 = makeBehaviorSubject(false)
+        val validEmail4 = makeBehaviorSubject(false)
 
         val validEmails = listOf(
                 validEmail1,
@@ -123,6 +122,9 @@ class FormValild: BaseFragment() {
                             false -> validEmails[index].onNext(true)
                         }
                     }, Throwable::printStackTrace)
+                    .apply {
+                        disposables.add(this)
+                    }
         }
 
         Observable.combineLatest<Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean>(validName, validEmailCount, validEmail1, validEmail2, validEmail3, validEmail4,
@@ -133,5 +135,13 @@ class FormValild: BaseFragment() {
                 }.apply {
                     disposables.add(this)
                 }
+    }
+
+    private fun <T> makeBehaviorSubject(default: T): BehaviorSubject<T> {
+
+
+
+
+        return BehaviorSubject.createDefault(default)
     }
 }
