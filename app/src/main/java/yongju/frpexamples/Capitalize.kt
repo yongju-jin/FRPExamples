@@ -33,7 +33,7 @@ class Capitalize : BaseFragment() {
 
         Observable.combineLatest<Any, CharSequence, String>(
                 RxView.clicks(btn_capitalize),
-                RxTextView.textChanges(editText),
+                RxTextView.textChanges(editText3),
                 BiFunction { _, tranText ->  tranText.toString().capitalize() }
         ).subscribe(
                 textView::setText,

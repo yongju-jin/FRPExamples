@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import com.jakewharton.rxbinding2.widget.RxTextView
-import kotlinx.android.synthetic.main.fragment_clear.*
+import kotlinx.android.synthetic.main.fragment_reverse.*
 import yongju.frpexamples.R.layout.fragment_reverse
 import yongju.frpexamples.base.BaseFragment
 
@@ -16,10 +16,10 @@ class Reverse : BaseFragment() {
     override val layoutId: Int = fragment_reverse
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        RxTextView.textChanges(editText)
+        RxTextView.textChanges(editText2)
             .map { it.reversed() }
             .subscribe(
-                textView2::setText,
+                textView3::setText,
                 Throwable::printStackTrace
             ).apply {
                 disposables.add(this)

@@ -19,7 +19,7 @@ class Clear : BaseFragment() {
         RxView.clicks(clear).map {
             ""
         }.subscribe(
-            editText::setText,
+            editText1::setText,
             Throwable::printStackTrace
         ).apply {
             disposables.add(this)
