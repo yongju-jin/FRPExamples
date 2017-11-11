@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_dollars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="DOLLARS"
+        app:layout_constraintEnd_toStartOf="@+id/tv_dollars_count"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_dollars_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="dollars count"
+        app:layout_constraintStart_toEndOf="@id/tv_dollars"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_liters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="LITERS"
+        app:layout_constraintEnd_toStartOf="@+id/tv_liters_count"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dollars" />
+
+    <TextView
+        android:id="@+id/tv_liters_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="liters count"
+        app:layout_constraintStart_toEndOf="@id/tv_liters"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dollars" />
+
+    <EditText
+        android:id="@+id/et_fuel1"
+        android:layout_width="81dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintEnd_toStartOf="@id/et_fuel2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_liters" />
+
+    <EditText
+        android:id="@+id/et_fuel2"
+        android:layout_width="81dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        app:layout_constraintStart_toEndOf="@id/et_fuel1"
+        app:layout_constraintTop_toBottomOf="@id/tv_liters" />
+
+    <EditText
+        android:id="@+id/et_fuel3"
+        android:layout_width="81dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/et_fuel2"
+        app:layout_constraintTop_toBottomOf="@id/tv_liters" />
+
+    <ToggleButton
+        android:id="@+id/tb_fuel1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="FUEL1"
+        android:background="@android:color/holo_red_light"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_fuel2" />
+
+    <ToggleButton
+        android:id="@+id/tb_fuel2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="FUEL2"
+        android:background="@android:color/holo_blue_light"
+        app:layout_constraintStart_toEndOf="@id/tb_fuel1"
+        app:layout_constraintTop_toBottomOf="@+id/et_fuel2"
+        tools:layout_editor_absoluteX="152dp" />
+
+    <ToggleButton
+        android:id="@+id/tb_fuel3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="FUEL3"
+        android:background="@android:color/holo_green_light"
+        app:layout_constraintStart_toEndOf="@id/tb_fuel2"
+        app:layout_constraintTop_toBottomOf="@+id/et_fuel2"
+        tools:layout_editor_absoluteX="309dp" />
+
+</android.support.constraint.ConstraintLayout>

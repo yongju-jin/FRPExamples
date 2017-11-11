@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.android.synthetic.main.fragment_merge.*
 import yongju.frpexamples.R.layout.fragment_merge
 import yongju.frpexamples.base.BaseFragment
@@ -16,8 +17,8 @@ class Merge : BaseFragment() {
     override val layoutId: Int = fragment_merge
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        val obHello = RxView.clicks(btn_hello).map { "hello" }
-        val obThx = RxView.clicks(btn_thx).map { "thank you" }
+        val obHello = btn_hello.clicks().map { "hello" }
+        val obThx = btn_thx.clicks().map { "thank you" }
 
         obHello.mergeWith(obThx)
             .subscribe(
