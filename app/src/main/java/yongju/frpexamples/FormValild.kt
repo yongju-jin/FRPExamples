@@ -138,10 +138,6 @@ class FormValild: BaseFragment() {
     }
 
     private fun <T> makeBehaviorSubject(default: T): BehaviorSubject<T> {
-
-
-
-
         return BehaviorSubject.createDefault(default)
     }
 }

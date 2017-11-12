@@ -1,7 +1,6 @@
 package yongju.frpexamples.fuelpump01
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.jakewharton.rxbinding2.widget.checkedChanges
 import io.reactivex.Observable
@@ -22,7 +21,7 @@ class FuelPump01 : BaseFragment() {
     override val layoutId: Int = fragment_fuelpump
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        val obLiter = BehaviorSubject.createDefault("").apply {
+        val obLiter = BehaviorSubject.create<String>().apply {
             subscribe({
                 tv_liters_count.text = it
             }, Throwable::printStackTrace).apply {
@@ -30,9 +29,9 @@ class FuelPump01 : BaseFragment() {
             }
         }
 
-        val obFuel1 = tb_fuel1.checkedChanges().skip(1)
-        val obFuel2 = tb_fuel2.checkedChanges().skip(1)
-        val obFuel3 = tb_fuel3.checkedChanges().skip(1)
+        val obFuel1 = tb_fuel1.checkedChanges().skip(1).share()
+        val obFuel2 = tb_fuel2.checkedChanges().skip(1).share()
+        val obFuel3 = tb_fuel3.checkedChanges().skip(1).share()
 
         val fuel1 = Fuel.Fuel1("1")
         val fuel2 = Fuel.Fuel2("2")
@@ -48,8 +47,14 @@ class FuelPump01 : BaseFragment() {
 
         val fillActive = BehaviorSubject.createDefault<Fuel>(Empty).apply {
             subscribe({
-                Log.d(TAG, "[fillActive] $it")
-                obLiter.onNext(it.toString())
+                obLiter.onNext(
+                    when(it) {
+                        is Fuel.Fuel1 -> "1"
+                        is Fuel.Fuel2 -> "2"
+                        is Fuel.Fuel3 -> "3"
+                        is Empty -> ""
+                    }
+                )
             }, Throwable::printStackTrace).apply {
                 disposables.add(this)
             }
@@ -58,7 +63,6 @@ class FuelPump01 : BaseFragment() {
         val obFuelDown = obFuel1Down.mergeWith(obFuel2Down).mergeWith(obFuel3Down)
         val obEnd = obFuelDown.withLatestFrom<Fuel, Fuel>(fillActive,
                 BiFunction { fuel, fActive ->
-                    Log.d(TAG, "[obEnd] fuel3: $fuel, fActive: $fActive")
                     when (fuel) {
                         fActive -> Empty
                         else -> fuel
@@ -70,7 +74,6 @@ class FuelPump01 : BaseFragment() {
         val obFuelLift = obFuel1Lift.mergeWith(obFuel2Lift).mergeWith(obFuel3Lift)
         val obStart = obFuelLift.withLatestFrom<Fuel, Fuel>(fillActive,
                 BiFunction { fuel, fActive ->
-                    Log.d(TAG, "[obStart] fuel3: $fuel, fActive: $fActive")
                     when (fActive) {
                         is Empty -> fuel
                         else -> Empty
@@ -81,7 +84,6 @@ class FuelPump01 : BaseFragment() {
 
         obEnd.mergeWith(obStart)
                 .subscribe({
-                    Log.d(TAG, "[obStartEnd] $it")
                     fillActive.onNext(it)
                 }, Throwable::printStackTrace).apply {
                     disposables.add(this)
@@ -90,14 +92,12 @@ class FuelPump01 : BaseFragment() {
 
     private fun whenFuelLift(obFuel: Observable<Boolean>, fuel: Fuel): Observable<Fuel>
         = obFuel.filter {
-                Log.d(TAG, "[whenFueLift] $it")
                 it
             }
             .map { fuel }
 
     private fun whenFuelDown(obFuel: Observable<Boolean>, fuel: Fuel)
         = obFuel.filter {
-                Log.d(TAG, "[whenFueDown] $it")
                 !it
             }
             .map { fuel }
