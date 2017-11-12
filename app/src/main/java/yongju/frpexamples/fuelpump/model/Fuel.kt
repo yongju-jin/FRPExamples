@@ -1,4 +1,4 @@
-package yongju.frpexamples.fuelpump01.model
+package yongju.frpexamples.fuelpump.model
 
 /**
  * Created by yongju on 2017. 11. 8..

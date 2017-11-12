@@ -1,4 +1,4 @@
-package yongju.frpexamples.fuelpump01
+package yongju.frpexamples.fuelpump
 
 import android.os.Bundle
 import android.view.View
@@ -9,8 +9,8 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.fragment_fuelpump.*
 import yongju.frpexamples.R.layout.fragment_fuelpump
 import yongju.frpexamples.base.BaseFragment
-import yongju.frpexamples.fuelpump01.model.Empty
-import yongju.frpexamples.fuelpump01.model.Fuel
+import yongju.frpexamples.fuelpump.model.Empty
+import yongju.frpexamples.fuelpump.model.Fuel
 
 /**
  * Created by yongju on 2017. 11. 4..
@@ -91,14 +91,11 @@ class FuelPump01 : BaseFragment() {
     }
 
     private fun whenFuelLift(obFuel: Observable<Boolean>, fuel: Fuel): Observable<Fuel>
-        = obFuel.filter {
-                it
-            }
-            .map { fuel }
+        = obFuel.filter { it }
+                .map { fuel }
 
     private fun whenFuelDown(obFuel: Observable<Boolean>, fuel: Fuel)
-        = obFuel.filter {
-                !it
-            }
-            .map { fuel }
+        = obFuel.filter { !it }
+                .map { fuel }
+
 }

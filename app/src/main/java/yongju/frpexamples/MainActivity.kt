@@ -10,7 +10,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
-import yongju.frpexamples.fuelpump01.FuelPump01
+import yongju.frpexamples.fuelpump.FuelPump01
 
 class MainActivity : AppCompatActivity() {
 
