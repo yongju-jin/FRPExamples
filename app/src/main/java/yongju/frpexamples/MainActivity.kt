@@ -1,7 +1,6 @@
 package yongju.frpexamples
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -10,7 +9,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
-import yongju.frpexamples.fuelpump.FuelPump01
+import yongju.frpexamples.fuelpump.AccumulatePulsesPump
+import yongju.frpexamples.fuelpump.LifeCycle
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,10 +34,10 @@ class MainActivity : AppCompatActivity() {
         // Set up the ViewPager with the sections adapter.
         container.adapter = SectionsPagerAdapter(supportFragmentManager)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show()
+//        }
     }
 
 
@@ -72,19 +72,20 @@ class MainActivity : AppCompatActivity() {
             return when (position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-                6 -> Clear() // fragment_clear
-                5 -> Reverse() // fragment_reverse
-                4 -> Merge() // fragment_merge
-                3 -> Capitalize() // Capitalize
-                2 -> Accumuluator() // accumulator
-                1 -> FormValild() // form valid
-                0 -> FuelPump01()
+                7 -> Clear() // fragment_clear
+                6 -> Reverse() // fragment_reverse
+                5 -> Merge() // fragment_merge
+                4 -> Capitalize() // Capitalize
+                3 -> Accumuluator() // accumulator
+                2 -> FormValild() // form valid
+                1 -> LifeCycle()
+                0 -> AccumulatePulsesPump()
                 else -> throw IllegalStateException("no more fragment")
             }
         }
 
         override fun getCount(): Int {
-            return 7
+            return 8
         }
     }
 
