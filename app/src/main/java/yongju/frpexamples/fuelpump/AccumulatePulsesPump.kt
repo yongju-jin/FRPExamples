@@ -75,7 +75,7 @@ class AccumulatePulsesPump : BaseFragment() {
 
         val obPulses = Observable.interval(200, TimeUnit.MILLISECONDS)
                 .withLatestFrom<Fuel, Fuel>(fillActive,
-                    BiFunction { t1, t2 ->
+                    BiFunction { _, t2 ->
                     t2
                 }).filter {
                     it != Empty
