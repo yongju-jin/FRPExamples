@@ -130,7 +130,6 @@ class ShowDollarsPump : BaseFragment() {
 
         val obPrice = obStart.withLatestFrom<CharSequence, CharSequence, CharSequence, Double>(obPrice1, obPrice2, obPrice3,
                 Function4 { start, price1, price2, price3 ->
-                    Log.d(TAG, "start: $start, price1, $price1, price2: $price2, price3: $price3")
                     (when (start) {
                         is Fuel.Fuel1 -> price1
                         is Fuel.Fuel2 -> price2
@@ -141,7 +140,6 @@ class ShowDollarsPump : BaseFragment() {
 
         obCaliTotal.withLatestFrom<Double, Double>(obPrice,
                 BiFunction { caliTotal, price ->
-                    Log.d(TAG, "caliTotal, $caliTotal, price: $price")
                     caliTotal * price })
                 .subscribe({
                     obDollars.onNext(it.toString())
