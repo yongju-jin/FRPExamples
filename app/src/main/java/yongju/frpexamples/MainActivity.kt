@@ -11,6 +11,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import yongju.frpexamples.fuelpump.AccumulatePulsesPump
 import yongju.frpexamples.fuelpump.LifeCycle
+import yongju.frpexamples.fuelpump.ShowDollarsPump
 
 class MainActivity : AppCompatActivity() {
 
@@ -72,14 +73,15 @@ class MainActivity : AppCompatActivity() {
             return when (position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-                7 -> Clear() // fragment_clear
-                6 -> Reverse() // fragment_reverse
-                5 -> Merge() // fragment_merge
-                4 -> Capitalize() // Capitalize
-                3 -> Accumuluator() // accumulator
-                2 -> FormValild() // form valid
-                1 -> LifeCycle()
-                0 -> AccumulatePulsesPump()
+                8 -> Clear() // fragment_clear
+                7 -> Reverse() // fragment_reverse
+                6 -> Merge() // fragment_merge
+                5 -> Capitalize() // Capitalize
+                4 -> Accumuluator() // accumulator
+                3 -> FormValild() // form valid
+                2 -> LifeCycle()
+                1 -> AccumulatePulsesPump()
+                0 -> ShowDollarsPump()
                 else -> throw IllegalStateException("no more fragment")
             }
         }
