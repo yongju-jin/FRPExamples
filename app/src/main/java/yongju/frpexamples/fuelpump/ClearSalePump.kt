@@ -1,12 +1,16 @@
 package yongju.frpexamples.fuelpump
 
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.View
 import com.jakewharton.rxbinding2.widget.checkedChanges
 import com.jakewharton.rxbinding2.widget.textChanges
 import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import io.reactivex.functions.Function4
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.fragment_fuelpump.*
@@ -14,16 +18,19 @@ import yongju.frpexamples.R.layout.fragment_fuelpump
 import yongju.frpexamples.base.BaseFragment
 import yongju.frpexamples.fuelpump.model.Empty
 import yongju.frpexamples.fuelpump.model.Fuel
+import yongju.frpexamples.fuelpump.model.base.Phase
 import java.util.concurrent.TimeUnit
 
 /**
- * Created by yongju on 2017. 11. 20..
+ * Created by yongju on 2017. 11. 23..
  */
-class ShowDollarsPump : BaseFragment() {
-    private val TAG = "ShowDollarsPump"
+class ClearSalePump: BaseFragment() {
+    private val TAG = "ClearSalePump"
+
     override val layoutId: Int = fragment_fuelpump
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        // liter 스트림
         val obLiter = BehaviorSubject.create<String>().apply {
             observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
@@ -33,6 +40,7 @@ class ShowDollarsPump : BaseFragment() {
             }
         }
 
+        // 가격(Dollars)의 스트림
         val obDollars = BehaviorSubject.create<String>().apply {
             observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
@@ -62,21 +70,37 @@ class ShowDollarsPump : BaseFragment() {
         val obFuel2Lift = whenFuelLift(obFuel2, fuel2)
         val obFuel3Lift = whenFuelLift(obFuel3, fuel3)
 
-        val fillActive = BehaviorSubject.createDefault<Fuel>(Empty)
+        // 노즐에서 흘러가는지 나타내는 스트림
+        val obFuelFlowing = BehaviorSubject.createDefault<Fuel>(Empty)
+        // 주유 중인지 나타내는 스트림
+        val obFillActive = BehaviorSubject.createDefault<Fuel>(Empty).apply {
+            filter {
+                it == Empty
+            }.subscribe({
+                obLiter.onNext("Liter")
+                obDollars.onNext("Dollars")
+                et_fuel1.isSelected = false
+                et_fuel2.isSelected = false
+                et_fuel3.isSelected = false
+            }, Throwable::printStackTrace).apply {
+                disposables.add(this)
+            }
+        }
 
         val obFuelDown = obFuel1Down.mergeWith(obFuel2Down).mergeWith(obFuel3Down)
-        val obEnd = obFuelDown.withLatestFrom<Fuel, Fuel>(fillActive,
+        // 노즐을 내려놓았을 때 스트림.
+        val obNozzleDown = obFuelDown.withLatestFrom<Fuel, Fuel>(obFuelFlowing,
                 BiFunction { fuel, fActive ->
                     when (fuel) {
-                        fActive -> Empty
-                        else -> fuel
+                        fActive -> fuel
+                        else -> Empty
                     }
                 }).filter {
-            it == Empty
+            it != Empty
         }
 
         val obFuelLift = obFuel1Lift.mergeWith(obFuel2Lift).mergeWith(obFuel3Lift)
-        val obStart = obFuelLift.withLatestFrom<Fuel, Fuel>(fillActive,
+        val obNozzleUp = obFuelLift.withLatestFrom<Fuel, Fuel>(obFuelFlowing,
                 BiFunction { fuel, fActive ->
                     when (fActive) {
                         is Empty -> fuel
@@ -84,19 +108,52 @@ class ShowDollarsPump : BaseFragment() {
                     }
                 }).filter {
             it != Empty
-        }.share()
+        }
 
         val obPulses = Observable.interval(200, TimeUnit.MILLISECONDS)
-                .withLatestFrom<Fuel, Fuel>(fillActive,
+                .withLatestFrom<Fuel, Fuel>(obFuelFlowing,
                         BiFunction { _, t2 ->
                             t2
                         }).filter {
             it != Empty
-        }
-                .map { FuelPulses }
+        }.map { FuelPulses }
 
         val obCali = BehaviorSubject.createDefault(Calibration)
         val obTotal = BehaviorSubject.createDefault(0)
+
+        val phase = BehaviorSubject.createDefault(Phase.IDLE)
+        val obClearSale = BehaviorSubject.create<Fuel>()
+
+        val obStart = obNozzleUp.withLatestFrom<Phase, Fuel>(phase,
+                BiFunction { nozzle, _phase ->
+                    Log.d(TAG, "[obStart] nozzle: $nozzle, _phase: $_phase")
+                    when(_phase) {
+                        Phase.IDLE -> nozzle
+                        else -> Empty
+                    }
+                }).filter {
+            it != Empty
+        }.share()
+
+        val obEnd = obNozzleDown.withLatestFrom<Phase, Fuel>(phase,
+                BiFunction { nozzle, _phase ->
+                    Log.d(TAG, "[obEnd] nozzle: $nozzle, _phase: $_phase")
+                    when(_phase) {
+                        Phase.FILLING -> nozzle
+                        else -> Empty
+                    }
+                }).filter {
+            it != Empty
+        }.map { Empty }.share()
+
+        // 결과를 확인하거나 주유가 시작할 때 상태를 스트림에 데이터를 emit
+        obClearSale.mergeWith(obStart)
+                .subscribe({
+                    obFillActive.onNext(it)
+                }, Throwable::printStackTrace)
+                .apply {
+                    disposables.add(this)
+                }
 
         obStart.map { 0 }.mergeWith(
                 obPulses.withLatestFrom<Int, Int>(obTotal,
@@ -109,10 +166,32 @@ class ShowDollarsPump : BaseFragment() {
             disposables.add(this)
         }
 
-        obEnd.mergeWith(obStart)
+        obStart.mergeWith(obEnd)
                 .subscribe({
-                    fillActive.onNext(it)
+                    Log.d(TAG, "[obStart_obEnd] it: $it")
+                    obFuelFlowing.onNext(it)
                 }, Throwable::printStackTrace).apply {
+            disposables.add(this)
+        }
+
+        obStart.map { Phase.FILLING }
+                .mergeWith(
+                    obEnd.map { Phase.POS }
+                )
+                .mergeWith(
+                    obClearSale.map { Phase.IDLE }
+                ).subscribe({
+            phase.onNext(it)
+        }, Throwable::printStackTrace).apply {
+            disposables.add(this)
+        }
+
+        obEnd.withLatestFrom<String, String, String>(obDollars, obLiter,
+                Function3 { _, dollar, liter ->
+                    "Dollar: $dollar, \nliter: $liter"
+                }).subscribe({
+            showCompleteDialog(obClearSale, it)
+        }, Throwable::printStackTrace).apply {
             disposables.add(this)
         }
 
@@ -146,6 +225,17 @@ class ShowDollarsPump : BaseFragment() {
             disposables.add(this)
         }
     }
+
+    private fun showCompleteDialog(obClearSale: Observer<Fuel>, msg: String)
+        = AlertDialog.Builder(activity)
+                .setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK", { _, _ ->
+                    obClearSale.onNext(Empty)
+                })
+                .create()
+                .show()
+
 
     private fun whenFuelLift(obFuel: Observable<Boolean>, fuel: Fuel): Observable<Fuel>
             = obFuel.filter { it }
