@@ -9,10 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
-import yongju.frpexamples.fuelpump.AccumulatePulsesPump
-import yongju.frpexamples.fuelpump.ClearSalePump
-import yongju.frpexamples.fuelpump.LifeCycle
-import yongju.frpexamples.fuelpump.ShowDollarsPump
+import yongju.frpexamples.fuelpump.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,22 +71,23 @@ class MainActivity : AppCompatActivity() {
             return when (position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-                9 -> Clear() // fragment_clear
-                8 -> Reverse() // fragment_reverse
-                7 -> Merge() // fragment_merge
-                6 -> Capitalize() // Capitalize
-                5 -> Accumuluator() // accumulator
-                4 -> FormValild() // form valid
-                3 -> LifeCycle()
-                2 -> AccumulatePulsesPump()
-                1 -> ShowDollarsPump()
-                0 -> ClearSalePump()
+                10 -> Clear() // fragment_clear
+                9 -> Reverse() // fragment_reverse
+                8 -> Merge() // fragment_merge
+                7 -> Capitalize() // Capitalize
+                6 -> Accumuluator() // accumulator
+                5 -> FormValild() // form valid
+                4 -> LifeCycle()
+                3 -> AccumulatePulsesPump()
+                2 -> ShowDollarsPump()
+                1 -> ClearSalePump()
+                0 -> KeypadPump()
                 else -> throw IllegalStateException("no more fragment")
             }
         }
 
         override fun getCount(): Int {
-            return 8
+            return 11
         }
     }
 
