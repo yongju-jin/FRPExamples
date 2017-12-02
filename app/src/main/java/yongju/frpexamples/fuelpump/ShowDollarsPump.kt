@@ -12,7 +12,7 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.fragment_fuelpump.*
 import yongju.frpexamples.R.layout.fragment_fuelpump
 import yongju.frpexamples.base.BaseFragment
-import yongju.frpexamples.fuelpump.model.Empty
+import yongju.frpexamples.fuelpump.model.Fuel.Empty
 import yongju.frpexamples.fuelpump.model.Fuel
 import java.util.concurrent.TimeUnit
 
@@ -50,17 +50,13 @@ class ShowDollarsPump : BaseFragment() {
         val obFuel2 = tb_fuel2.checkedChanges().skip(1).share()
         val obFuel3 = tb_fuel3.checkedChanges().skip(1).share()
 
-        val fuel1 = Fuel.Fuel1("1")
-        val fuel2 = Fuel.Fuel2("2")
-        val fuel3 = Fuel.Fuel3("3")
+        val obFuel1Down = whenFuelDown(obFuel1, Fuel.Fuel1)
+        val obFuel2Down = whenFuelDown(obFuel2, Fuel.Fuel2)
+        val obFuel3Down = whenFuelDown(obFuel3, Fuel.Fuel3)
 
-        val obFuel1Down = whenFuelDown(obFuel1, fuel1)
-        val obFuel2Down = whenFuelDown(obFuel2, fuel2)
-        val obFuel3Down = whenFuelDown(obFuel3, fuel3)
-
-        val obFuel1Lift = whenFuelLift(obFuel1, fuel1)
-        val obFuel2Lift = whenFuelLift(obFuel2, fuel2)
-        val obFuel3Lift = whenFuelLift(obFuel3, fuel3)
+        val obFuel1Lift = whenFuelLift(obFuel1, Fuel.Fuel1)
+        val obFuel2Lift = whenFuelLift(obFuel2, Fuel.Fuel2)
+        val obFuel3Lift = whenFuelLift(obFuel3, Fuel.Fuel3)
 
         val fillActive = BehaviorSubject.createDefault<Fuel>(Empty)
 

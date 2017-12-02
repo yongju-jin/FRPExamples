@@ -10,15 +10,16 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import io.reactivex.functions.Function3
 import io.reactivex.functions.Function4
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.fragment_fuelpump.*
 import yongju.frpexamples.R.layout.fragment_fuelpump
 import yongju.frpexamples.base.BaseFragment
-import yongju.frpexamples.fuelpump.model.Empty
+import yongju.frpexamples.fuelpump.model.Fuel.Empty
 import yongju.frpexamples.fuelpump.model.Fuel
-import yongju.frpexamples.fuelpump.model.base.Phase
+import yongju.frpexamples.fuelpump.model.Phase
 import java.util.concurrent.TimeUnit
 
 /**
@@ -58,17 +59,13 @@ class ClearSalePump: BaseFragment() {
         val obFuel2 = tb_fuel2.checkedChanges().skip(1).share()
         val obFuel3 = tb_fuel3.checkedChanges().skip(1).share()
 
-        val fuel1 = Fuel.Fuel1("1")
-        val fuel2 = Fuel.Fuel2("2")
-        val fuel3 = Fuel.Fuel3("3")
+        val obFuel1Down = whenFuelDown(obFuel1, Fuel.Fuel1)
+        val obFuel2Down = whenFuelDown(obFuel2, Fuel.Fuel2)
+        val obFuel3Down = whenFuelDown(obFuel3, Fuel.Fuel3)
 
-        val obFuel1Down = whenFuelDown(obFuel1, fuel1)
-        val obFuel2Down = whenFuelDown(obFuel2, fuel2)
-        val obFuel3Down = whenFuelDown(obFuel3, fuel3)
-
-        val obFuel1Lift = whenFuelLift(obFuel1, fuel1)
-        val obFuel2Lift = whenFuelLift(obFuel2, fuel2)
-        val obFuel3Lift = whenFuelLift(obFuel3, fuel3)
+        val obFuel1Lift = whenFuelLift(obFuel1, Fuel.Fuel1)
+        val obFuel2Lift = whenFuelLift(obFuel2, Fuel.Fuel2)
+        val obFuel3Lift = whenFuelLift(obFuel3, Fuel.Fuel3)
 
         // 노즐에서 흘러가는지 나타내는 스트림
         val obFuelFlowing = BehaviorSubject.createDefault<Fuel>(Empty)
@@ -121,14 +118,14 @@ class ClearSalePump: BaseFragment() {
         val obCali = BehaviorSubject.createDefault(Calibration)
         val obTotal = BehaviorSubject.createDefault(0)
 
-        val phase = BehaviorSubject.createDefault(Phase.IDLE)
+        val phase = BehaviorSubject.createDefault<Phase>(Phase.Idle)
         val obClearSale = BehaviorSubject.create<Fuel>()
 
         val obStart = obNozzleUp.withLatestFrom<Phase, Fuel>(phase,
                 BiFunction { nozzle, _phase ->
                     Log.d(TAG, "[obStart] nozzle: $nozzle, _phase: $_phase")
                     when(_phase) {
-                        Phase.IDLE -> nozzle
+                        Phase.Idle -> nozzle
                         else -> Empty
                     }
                 }).filter {
@@ -139,7 +136,7 @@ class ClearSalePump: BaseFragment() {
                 BiFunction { nozzle, _phase ->
                     Log.d(TAG, "[obEnd] nozzle: $nozzle, _phase: $_phase")
                     when(_phase) {
-                        Phase.FILLING -> nozzle
+                        Phase.Filling -> nozzle
                         else -> Empty
                     }
                 }).filter {
@@ -174,12 +171,14 @@ class ClearSalePump: BaseFragment() {
             disposables.add(this)
         }
 
-        obStart.map { Phase.FILLING }
-                .mergeWith(
-                    obEnd.map { Phase.POS }
+        obStart.map<Phase>(
+                    { Phase.Filling }
                 )
                 .mergeWith(
-                    obClearSale.map { Phase.IDLE }
+                    obEnd.map { Phase.Pos }
+                )
+                .mergeWith(
+                    obClearSale.map { Phase.Idle}
                 ).subscribe({
             phase.onNext(it)
         }, Throwable::printStackTrace).apply {

@@ -4,9 +4,8 @@ package yongju.frpexamples.fuelpump.model
  * Created by yongju on 2017. 11. 8..
  */
 sealed class Fuel {
-    class Fuel1(val name: String): Fuel()
-    class Fuel2(val name: String): Fuel()
-    class Fuel3(val name: String): Fuel()
+    object Fuel1: Fuel()
+    object Fuel2: Fuel()
+    object Fuel3: Fuel()
+    object Empty: Fuel()
 }
-
-object Empty: Fuel()
