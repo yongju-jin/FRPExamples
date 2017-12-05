@@ -5,6 +5,33 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tv_preset_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="PRESET"
+        app:layout_constraintBottom_toTopOf="@+id/tv_dollars"
+        app:layout_constraintEnd_toStartOf="@+id/tv_preset_count"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_preset_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="preset count"
+        app:layout_constraintBottom_toTopOf="@+id/tv_dollars_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_preset_name"
+        app:layout_constraintTop_toTopOf="parent" />`
+
+    <TextView
         android:id="@+id/tv_dollars"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -16,7 +43,7 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_dollars_count"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_preset_name" />
 
     <TextView
         android:id="@+id/tv_dollars_count"
@@ -29,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/tv_dollars"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_preset_count" />
 
     <TextView
         android:id="@+id/tv_liters"

@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         // Set up the ViewPager with the sections adapter.
         container.adapter = SectionsPagerAdapter(supportFragmentManager)
 
+
 //        fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                    .setAction("Action", null).show()
@@ -71,23 +72,24 @@ class MainActivity : AppCompatActivity() {
             return when (position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-                10 -> Clear() // fragment_clear
-                9 -> Reverse() // fragment_reverse
-                8 -> Merge() // fragment_merge
-                7 -> Capitalize() // Capitalize
-                6 -> Accumuluator() // accumulator
-                5 -> FormValild() // form valid
-                4 -> LifeCycle()
-                3 -> AccumulatePulsesPump()
-                2 -> ShowDollarsPump()
-                1 -> ClearSalePump()
-                0 -> KeypadPump()
+                11 -> Clear() // fragment_clear
+                10 -> Reverse() // fragment_reverse
+                9 -> Merge() // fragment_merge
+                8 -> Capitalize() // Capitalize
+                7 -> Accumuluator() // accumulator
+                6 -> FormValild() // form valid
+                5 -> LifeCycle()
+                4 -> AccumulatePulsesPump()
+                3 -> ShowDollarsPump()
+                2 -> ClearSalePump()
+                1 -> KeypadPump()
+                0 -> PresetAmountPump()
                 else -> throw IllegalStateException("no more fragment")
             }
         }
 
         override fun getCount(): Int {
-            return 11
+            return 12
         }
     }
 
