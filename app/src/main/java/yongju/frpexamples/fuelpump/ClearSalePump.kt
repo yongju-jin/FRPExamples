@@ -10,15 +10,14 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function
 import io.reactivex.functions.Function3
 import io.reactivex.functions.Function4
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.fragment_fuelpump.*
 import yongju.frpexamples.R.layout.fragment_fuelpump
 import yongju.frpexamples.base.BaseFragment
-import yongju.frpexamples.fuelpump.model.Fuel.Empty
 import yongju.frpexamples.fuelpump.model.Fuel
+import yongju.frpexamples.fuelpump.model.Fuel.Empty
 import yongju.frpexamples.fuelpump.model.Phase
 import java.util.concurrent.TimeUnit
 
@@ -172,7 +171,8 @@ class ClearSalePump: BaseFragment() {
         }
 
         obStart.map<Phase>(
-                    { Phase.Filling }
+                { Phase.Filling
+                }
                 )
                 .mergeWith(
                     obEnd.map { Phase.Pos }
@@ -211,7 +211,7 @@ class ClearSalePump: BaseFragment() {
                         is Fuel.Fuel1 -> price1
                         is Fuel.Fuel2 -> price2
                         is Fuel.Fuel3 -> price3
-                        else -> IllegalStateException("not selected fuel")
+                        else -> throw IllegalStateException("not selected fuel")
                     }).toString().toDouble()
                 })
 

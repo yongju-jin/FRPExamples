@@ -1,6 +1,7 @@
 package yongju.frpexamples.fuelpump
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.functions.BiFunction
@@ -13,12 +14,13 @@ import yongju.frpexamples.base.BaseFragment
  * Created by yongju on 2017. 11. 26..
  */
 class KeypadPump: BaseFragment() {
+    private val TAG = "KeypadPump"
     override val layoutId: Int = fragment_keypadpump
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         val value = BehaviorSubject.createDefault(0.0).apply {
             subscribe({
-                tv_preset.text = it.toString()
+                tv_preset_name.text = it.toString()
             }, Throwable::printStackTrace).apply {
                 disposables.add(this)
             }

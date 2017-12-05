@@ -129,7 +129,7 @@ class ShowDollarsPump : BaseFragment() {
                         is Fuel.Fuel1 -> price1
                         is Fuel.Fuel2 -> price2
                         is Fuel.Fuel3 -> price3
-                        else -> IllegalStateException("not selected fuel")
+                        else -> throw IllegalStateException("not selected fuel")
                     }).toString().toDouble()
                 })
 
